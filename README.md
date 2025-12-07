@@ -2,24 +2,22 @@
 #
 - JDK 17 or 21
 - Maven 3.9
-- MySQL 8
-
-# Technologies 
-- Spring MVC
-- Spring Security
-- Spring Data JPA
-- Maven
-- JSP
-- Tomcat
-- MySQL
-- Memcached
-- Rabbitmq
-- ElasticSearch
-# Database
-Here,we used Mysql DB 
-sql dump file:
-- /src/main/resources/db_backup.sql
-- db_backup.sql file is a mysql dump file.we have to import this dump to mysql db server
-- > mysql -u <user_name> -p accounts < db_backup.sql
 
 
+
+
+# If the Docker file is used from Locally :-
+
+FROM maven:3.9.9-eclipse-temurin-21-jammy AS build
+WORKDIR /app
+COPY . .
+RUN mvn install
+
+FROM tomcat:10-jdk21
+
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+COPY --from=build app/target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
+
+EXPOSE 8080
+CMD ["catalina.sh", "run"]
