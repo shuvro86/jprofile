@@ -2,7 +2,7 @@ FROM maven:3.9.9-eclipse-temurin-21-jammy AS build
 RUN git clone https://github.com/shuvro86/jprofile.git
 WORKDIR /app
 COPY . .
-RUN mvn install
+RUN mvn clean install -DskipTests
 
 FROM tomcat:10-jdk21
 
